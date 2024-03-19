@@ -3,11 +3,12 @@ import asyncio
 import nest_asyncio
 from azure.identity.aio import DefaultAzureCredential
 
-from src.common import retrieve_secret_from_vault, BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING
+from src.common import BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING, retrieve_secret_from_vault
 from src.eventhub_to_sa import main
 from src.settings import (
     checkpoint_blob_container_name,
     checkpoint_blob_storage_account_url,
+    consumer_group,
 )
 
 # TODO evne uitzoeken waar we deze moeten aanroepen. Hier, in eventhub_to_sa.py of beide
@@ -16,12 +17,14 @@ nest_asyncio.apply()
 
 if __name__ == "__main__":
     bronsysteem = "vlog1"
-    print(f"STARTING!!! --- eventhub-to-landingzone-{bronsysteem}")
+    event_hub_name = BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING[bronsysteem]
+
+    print(
+        f"STARTING!!! --- eventhub '{event_hub_name}' to landing zone '{bronsysteem}'-container ---"
+    )
     fully_qualified_namespace = retrieve_secret_from_vault(
         secret_name="eventhub-fully-qualified-namespace"
     )
-    event_hub_name = BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING[bronsysteem]
-    consumer_group = "test"
     credential = DefaultAzureCredential()
 
     # Run the main method.

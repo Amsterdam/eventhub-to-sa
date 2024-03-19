@@ -5,6 +5,15 @@ from typing import Literal
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
+BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
+    "anpr2": "anpr",
+    "lvma2": "lvma-telcamera-v2",
+    "lvma3": "vma-telcamera-v3",
+    "lvma23mix": "lvma-peoplemeasurement",
+    "reis1": "reistijden",
+    "vlog1": "vlog",
+}
+
 
 def get_environment_name(
     method: Literal["env_variable", "cluster_tag"] = "env_variable"

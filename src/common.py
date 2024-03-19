@@ -15,6 +15,16 @@ BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
 }
 
 
+BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
+    "anpr2": "json",
+    "lvma2": "json",
+    "lvma3": "json",
+    "lvma23mix": "json",
+    "reis1": "xml",
+    "vlog1": "json",
+}
+
+
 def get_environment_name(
     method: Literal["env_variable", "cluster_tag"] = "env_variable"
 ) -> str:

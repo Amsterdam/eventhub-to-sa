@@ -4,7 +4,7 @@ from datetime import datetime
 from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
 from azure.eventhub.extensions.checkpointstoreblobaio import BlobCheckpointStore
 from azure.identity.aio import DefaultAzureCredential
-from typing import Callable
+from typing import Literal
 
 from azure.eventhub import EventData
 
@@ -17,7 +17,7 @@ START_SCRIPT_DATE_TIME = datetime.now()
 
 async def on_event_batch_xml(
     partition_context: PartitionContext, event_batch: list[EventData]
-):
+) -> None:
     on_event_batch_date_time = datetime.now()
     print(
         f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}"
@@ -56,7 +56,7 @@ async def on_event_batch_xml(
 
 async def on_event_batch_json(
     partition_context: PartitionContext, event_batch: list[EventData]
-):
+) -> None:
     on_event_batch_date_time = datetime.now()
     print(
         f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}"
@@ -101,8 +101,8 @@ async def main(
     event_hub_fully_qualified_namespace: str,
     event_hub_name: str,
     consumer_group: str,
-    on_batch: Callable[[PartitionContext, list[EventData]], None],
-):
+    write_format: Literal["json", "xml"],
+) -> None:
     # Create an Azure blob checkpoint store to store the checkpoints.
     checkpoint_store = BlobCheckpointStore(
         blob_account_url=blob_storage_account_url,
@@ -118,6 +118,13 @@ async def main(
         checkpoint_store=checkpoint_store,
         credential=credential,
     )
+
+    if write_format == "json":
+        on_batch = on_event_batch_json
+    elif write_format == "xml":
+        on_batch = on_event_batch_xml
+    else:
+        raise ValueError(f"Unknown 'write_format' value, '{write_format}'.")
 
     async with client:
         await client.receive_batch(  # Replace with client.receive_batch()

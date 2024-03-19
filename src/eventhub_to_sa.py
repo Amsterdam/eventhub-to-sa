@@ -29,7 +29,7 @@ async def on_event_batch(partition_context, event_batch):
     if (on_event_batch_date_time - CACHE[partition_context.partition_id][
         'last_flush_datetime']).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
-        # TODO store data
+        # TODO implement store data write_to_landing_zone.py
 
         if len(CACHE[partition_context.partition_id]['cached_events']) > 0:
             await partition_context.update_checkpoint(CACHE[partition_context.partition_id]['cached_events'][-1])
@@ -39,6 +39,7 @@ async def on_event_batch(partition_context, event_batch):
         print("min wait time not met")
 
 
+# TODO on_event_batch meegeven als param callable
 async def main(credential: DefaultAzureCredential, blob_storage_account_url: str, blob_container_name: str, event_hub_fully_qualified_namespace: str, event_hub_name: str):
     # Create an Azure blob checkpoint store to store the checkpoints.
     checkpoint_store = BlobCheckpointStore(

@@ -8,6 +8,7 @@ nest_asyncio.apply()
 
 
 if __name__ == "__main__":
+    print("STARTING!!!")
     # TODO we kunnen deze misschien voor het gemak in een soort settings.py zetten
     blob_storage_account_url = "https://checkpointweuovbiesondow.blob.core.windows.net"
     blob_container_name = "event-hub-checkpoints"

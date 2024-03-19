@@ -48,6 +48,7 @@ async def main(
         blob_container_name: str,
         event_hub_fully_qualified_namespace: str,
         event_hub_name: str,
+        consumer_group: str,
         on_batch: callable[[PartitionContext, list[EventData]], None]
 ):
     # Create an Azure blob checkpoint store to store the checkpoints.
@@ -61,7 +62,7 @@ async def main(
     client = EventHubConsumerClient(
         fully_qualified_namespace=event_hub_fully_qualified_namespace,
         eventhub_name=event_hub_name,
-        consumer_group="test",
+        consumer_group=consumer_group,
         checkpoint_store=checkpoint_store,
         credential=credential,
     )

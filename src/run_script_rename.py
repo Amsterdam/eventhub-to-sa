@@ -13,8 +13,19 @@ if __name__ == "__main__":
     blob_container_name = "event-hub-checkpoints"
     # hardTODO Deze misschien handig in de keyvault dan kan je hem voor dev en prod zonder trucjes gebruiken
     event_hub_fully_qualified_namespace = "dpmo-weu-eventhub-namespace-o-vbiesondow2u.servicebus.windows.net"
+
     event_hub_name = 'vlog'
+    consumer_group = 'test'
     credential = DefaultAzureCredential()
     # Run the main method.
-    asyncio.run(main(credential, blob_storage_account_url, blob_container_name, event_hub_fully_qualified_namespace,
-                     event_hub_name, on_event_batch_xml))
+    asyncio.run(
+        main(
+            credential=credential,
+            blob_storage_account_url=blob_storage_account_url,
+            blob_container_name=blob_container_name,
+            event_hub_fully_qualified_namespace=event_hub_fully_qualified_namespace,
+            event_hub_name=event_hub_name,
+            consumer_group=consumer_group,
+            on_batch=on_event_batch_xml
+        )
+    )

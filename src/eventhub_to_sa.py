@@ -4,6 +4,7 @@ from datetime import datetime
 from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
 from azure.eventhub.extensions.checkpointstoreblobaio import BlobCheckpointStore
 from azure.identity.aio import DefaultAzureCredential
+from typing import Callable
 
 from azure.eventhub import EventData
 
@@ -49,7 +50,7 @@ async def main(
         event_hub_fully_qualified_namespace: str,
         event_hub_name: str,
         consumer_group: str,
-        on_batch: callable[[PartitionContext, list[EventData]], None]
+        on_batch: Callable[[PartitionContext, list[EventData]], None]
 ):
     # Create an Azure blob checkpoint store to store the checkpoints.
     checkpoint_store = BlobCheckpointStore(

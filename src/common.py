@@ -9,7 +9,7 @@ BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "anpr2": "anpr",
     "lvma2": "lvma-telcamera-v2",
     "lvma3": "vma-telcamera-v3",
-    "lvma23mix": "lvma-peoplemeasurement",
+    "lvma23mix": "lvma-peoplemeasurement",  # TODO: rename 'lvma23mix' to 'lvma_cra' - cra for CentraleRekenApplicatie
     "reis1": "reistijden",
     "vlog1": "vlog",
 }
@@ -19,7 +19,7 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "anpr2": "json",
     "lvma2": "json",
     "lvma3": "json",
-    "lvma23mix": "json",
+    "lvma23mix": "json",  # TODO: rename 'lvma23mix' to 'lvma_cra' - cra for CentraleRekenApplicatie
     "reis1": "xml",
     "vlog1": "json",
 }

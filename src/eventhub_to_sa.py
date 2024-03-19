@@ -33,6 +33,34 @@ async def on_event_batch_xml(partition_context: PartitionContext, event_batch: l
         'last_flush_datetime']).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
         # TODO implement store data write_to_landing_zone.py xml
+        data = list(map(lambda e: e.body_as_str(), event_batch))
+
+        if len(CACHE[partition_context.partition_id]['cached_events']) > 0:
+            await partition_context.update_checkpoint(CACHE[partition_context.partition_id]['cached_events'][-1])
+        CACHE[partition_context.partition_id]['cached_events'] = []
+        CACHE[partition_context.partition_id]['last_flush_datetime'] = on_event_batch_date_time
+    else:
+        print("min wait time not met")
+
+
+async def on_event_batch_json(partition_context: PartitionContext, event_batch: list[EventData]):
+    on_event_batch_date_time = datetime.now()
+    print(f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}")
+    if partition_context.partition_id not in CACHE:
+        print("not in cache")
+        CACHE[partition_context.partition_id] = {}
+        CACHE[partition_context.partition_id]['last_flush_datetime'] = START_SCRIPT_DATE_TIME
+        CACHE[partition_context.partition_id]['cached_events'] = event_batch
+    else:
+        print("in cache")
+        CACHE[partition_context.partition_id]['cached_events'].extend(event_batch)
+        print(len(CACHE[partition_context.partition_id]['cached_events']))
+
+    if (on_event_batch_date_time - CACHE[partition_context.partition_id][
+        'last_flush_datetime']).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
+        print("!!!!flush to storage account and updateoffset!!!!")
+        # TODO implement store data write_to_landing_zone.py xml
+        data = list(map(lambda e: e.body_as_str(), event_batch))
 
         if len(CACHE[partition_context.partition_id]['cached_events']) > 0:
             await partition_context.update_checkpoint(CACHE[partition_context.partition_id]['cached_events'][-1])

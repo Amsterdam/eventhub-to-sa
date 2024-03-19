@@ -1,12 +1,12 @@
 import asyncio
+
 import nest_asyncio
-from src.eventhub_to_sa import main, on_event_batch_xml
-from src.settings import (
-    checkpoint_blob_container_name,
-    checkpoint_blob_storage_account_url,
-)
-from src.common import retrieve_secret_from_vault
 from azure.identity.aio import DefaultAzureCredential
+
+from src.common import retrieve_secret_from_vault
+from src.eventhub_to_sa import main
+from src.settings import (checkpoint_blob_container_name,
+                          checkpoint_blob_storage_account_url)
 
 # TODO evne uitzoeken waar we deze moeten aanroepen. Hier, in eventhub_to_sa.py of beide
 nest_asyncio.apply()
@@ -30,6 +30,6 @@ if __name__ == "__main__":
             event_hub_fully_qualified_namespace=fully_qualified_namespace,
             event_hub_name=event_hub_name,
             consumer_group=consumer_group,
-            on_batch=on_event_batch_xml,
+            write_format="xml",
         )
     )

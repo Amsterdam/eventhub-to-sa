@@ -1,12 +1,12 @@
-import nest_asyncio
-
 from datetime import datetime
-from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
-from azure.eventhub.extensions.checkpointstoreblobaio import BlobCheckpointStore
-from azure.identity.aio import DefaultAzureCredential
 from typing import Literal
 
+import nest_asyncio
 from azure.eventhub import EventData
+from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
+from azure.eventhub.extensions.checkpointstoreblobaio import \
+    BlobCheckpointStore
+from azure.identity.aio import DefaultAzureCredential
 
 nest_asyncio.apply()
 

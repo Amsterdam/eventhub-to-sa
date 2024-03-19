@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Literal
+
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 

@@ -6,13 +6,31 @@ from azure.eventhub import EventData
 from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
 from azure.eventhub.extensions.checkpointstoreblobaio import BlobCheckpointStore
 from azure.identity.aio import DefaultAzureCredential
-from src.common import write_json, write_xml
+from src.common import write_json, write_xml, EVENTHUB_NAME_TO_DIR_PATH_MAPPING, get_environment_name
 
 nest_asyncio.apply()
 
 CACHE = {}
 MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
+
+
+def get_file_name(start_date: datetime, end_date: datetime, partition_id: str, file_extension: str):
+    return f'{start_date}_{end_date}_{partition_id}.{file_extension}'
+
+
+def get_unity_catalog_name() -> str:
+    environment = get_environment_name()
+    if environment == "Ontwikkel":
+        return "dpmo_dev"
+    elif environment == "Productie":
+        return "dpmo_prd"
+    else:
+        raise ValueError(f"Unknown environment '{environment}', cannot determine unity catalog name.")
+
+
+def get_dir_path(eventhub_name: str):
+    return f"/Volumes/{get_unity_catalog_name}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING(eventhub_name)}/"
 
 
 async def on_event_batch_xml(
@@ -40,9 +58,14 @@ async def on_event_batch_xml(
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
         data_to_write = "\n".join(list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"])))
-        filename = f'{CACHE[partition_context.partition_id]["last_flush_datetime"]}_{on_event_batch_date_time}_{partition_context.partition_id}.json'
+        filename = get_file_name(
+            start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
+            end_date=on_event_batch_date_time,
+            partition_id=partition_context.partition_id,
+            file_extension="xml"
+        )
         write_xml(
-            dir_path="/Volumes/dpmo_dev/default/landingzone/vlog/v1/",
+            dir_path=get_dir_path(partition_context.eventhub_name),
             filename=filename,
             data_to_write=data_to_write
         )
@@ -83,9 +106,14 @@ async def on_event_batch_json(
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
         data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
-        filename = f'{CACHE[partition_context.partition_id]["last_flush_datetime"]}_{on_event_batch_date_time}_{partition_context.partition_id}.json'
+        filename = get_file_name(
+            start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
+            end_date=on_event_batch_date_time,
+            partition_id=partition_context.partition_id,
+            file_extension="json"
+        )
         write_json(
-            dir_path="/Volumes/dpmo_dev/default/landingzone/vlog/v1/",
+            dir_path=get_dir_path(partition_context.eventhub_name),
             filename=filename,
             data_to_write=data_to_write
         )

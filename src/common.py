@@ -8,12 +8,11 @@ from azure.keyvault.secrets import SecretClient
 BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "anpr2": "anpr",
     "lvma2": "lvma-telcamera-v2",
-    "lvma3": "vma-telcamera-v3",
+    "lvma3": "lvma-telcamera-v3",
     "lvma_cra": "lvma-peoplemeasurement",
     "reis1": "reistijden",
     "vlog1": "vlog",
 }
-
 
 BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "anpr2": "json",
@@ -22,6 +21,15 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "lvma_cra": "json",
     "reis1": "xml",
     "vlog1": "json",
+}
+
+EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
+    "anpr": "/anpr/v1",
+    "lvma-telcamera-v2": "/lvma-telcamera/v2/",
+    "vma-telcamera-v3": "/lvma-telcamera/v3/",
+    "lvma-peoplemeasurement": "/lvma-peoplemeasurement/v1/",
+    "reistijden": "/reistijden/v1/",
+    "vlog": "/vlog/v1/",
 }
 
 

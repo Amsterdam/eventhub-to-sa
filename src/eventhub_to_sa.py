@@ -30,7 +30,7 @@ def get_unity_catalog_name() -> str:
 
 
 def get_dir_path(eventhub_name: str):
-    return f"/Volumes/{get_unity_catalog_name}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING[eventhub_name]}/"
+    return f"/Volumes/{get_unity_catalog_name()}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING[eventhub_name]}/"
 
 
 async def on_event_batch_xml(

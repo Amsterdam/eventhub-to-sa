@@ -112,6 +112,7 @@ async def on_event_batch_json(
             partition_id=partition_context.partition_id,
             file_extension="json"
         )
+        print("----->" + get_dir_path(partition_context.eventhub_name))
         write_json(
             dir_path=get_dir_path(partition_context.eventhub_name),
             filename=filename,

@@ -79,7 +79,7 @@ async def on_event_batch_json(
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
         # TODO implement store data common.py write_json
-        data_to_write = list(map(lambda e: e.body_as_str(), event_batch))
+        data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
         filename = f'{CACHE[partition_context.partition_id]["last_flush_datetime"]}_{on_event_batch_date_time}_{partition_context.partition_id}.json'
         write_json(
             dir_path="/Volumes/dpmo_dev/default/landingzone/vlog/v1/",

@@ -6,11 +6,12 @@ from azure.eventhub import EventData
 from azure.eventhub.aio import EventHubConsumerClient, PartitionContext
 from azure.eventhub.extensions.checkpointstoreblobaio import BlobCheckpointStore
 from azure.identity.aio import DefaultAzureCredential
+from src.common import write_json, write_xml
 
 nest_asyncio.apply()
 
 CACHE = {}
-MINUTES_BEFORE_FLUSHING_TO_SA = 0.2  # Adjust to 15 minutes? before running on prod
+MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
 
 
@@ -38,9 +39,13 @@ async def on_event_batch_xml(
         - CACHE[partition_context.partition_id]["last_flush_datetime"]
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
-        # TODO implement store data common.py write_xml
-        data = list(map(lambda e: e.body_as_str(), event_batch))
-
+        data_to_write = "\n".join(list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"])))
+        filename = f'{CACHE[partition_context.partition_id]["last_flush_datetime"]}_{on_event_batch_date_time}_{partition_context.partition_id}.json'
+        write_xml(
+            dir_path="/Volumes/dpmo_dev/default/landingzone/vlog/v1/",
+            filename=filename,
+            data_to_write=data_to_write
+        )
         if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
             await partition_context.update_checkpoint(
                 CACHE[partition_context.partition_id]["cached_events"][-1]
@@ -77,8 +82,13 @@ async def on_event_batch_json(
         - CACHE[partition_context.partition_id]["last_flush_datetime"]
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
-        # TODO implement store data common.py write_xml
-        data = list(map(lambda e: e.body_as_str(), event_batch))
+        data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
+        filename = f'{CACHE[partition_context.partition_id]["last_flush_datetime"]}_{on_event_batch_date_time}_{partition_context.partition_id}.json'
+        write_json(
+            dir_path="/Volumes/dpmo_dev/default/landingzone/vlog/v1/",
+            filename=filename,
+            data_to_write=data_to_write
+        )
 
         if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
             await partition_context.update_checkpoint(

@@ -92,7 +92,6 @@ async def on_event_batch_json(
         print("min wait time not met")
 
 
-# TODO on_event_batch meegeven als param callable
 async def main(
     credential: DefaultAzureCredential,
     blob_storage_account_url: str,

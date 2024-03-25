@@ -134,7 +134,7 @@ async def on_event_batch_json(
 
 async def on_error(partition_context: PartitionContext, ex: Exception):
     print("!!!!!!!!!!!!!!!!!!!!!!!!Error!!!!")
-    sys.exit(0)
+    sys.exit(-1)
 
 
 async def main(

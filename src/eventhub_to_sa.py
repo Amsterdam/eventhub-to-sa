@@ -85,58 +85,58 @@ async def on_event_batch_xml(
 async def on_event_batch_json(
     partition_context: PartitionContext, event_batch: list[EventData]
 ) -> None:
-    try:
-        on_event_batch_date_time = datetime.now()
-        print(
-            f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}"
+    # try:
+    on_event_batch_date_time = datetime.now()
+    print(
+        f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}"
+    )
+    if partition_context.partition_id not in CACHE:
+        print("not in cache")
+        CACHE[partition_context.partition_id] = {}
+        CACHE[partition_context.partition_id][
+            "last_flush_datetime"
+        ] = START_SCRIPT_DATE_TIME
+        CACHE[partition_context.partition_id]["cached_events"] = event_batch
+    else:
+        print("in cache")
+        CACHE[partition_context.partition_id]["cached_events"].extend(event_batch)
+        print(len(CACHE[partition_context.partition_id]["cached_events"]))
+
+    if (
+        on_event_batch_date_time
+        - CACHE[partition_context.partition_id]["last_flush_datetime"]
+    ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
+        print("!!!!flush to storage account and updateoffset!!!!")
+        data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
+        filename = get_file_name(
+            start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
+            end_date=on_event_batch_date_time,
+            partition_id=partition_context.partition_id,
+            file_extension="json"
         )
-        if partition_context.partition_id not in CACHE:
-            print("not in cache")
-            CACHE[partition_context.partition_id] = {}
-            CACHE[partition_context.partition_id][
-                "last_flush_datetime"
-            ] = START_SCRIPT_DATE_TIME
-            CACHE[partition_context.partition_id]["cached_events"] = event_batch
-        else:
-            print("in cache")
-            CACHE[partition_context.partition_id]["cached_events"].extend(event_batch)
-            print(len(CACHE[partition_context.partition_id]["cached_events"]))
+        write_json(
+            dir_path=get_dir_path(partition_context.eventhub_name),
+            filename=filename,
+            data_to_write=data_to_write
+        )
 
-        if (
-            on_event_batch_date_time
-            - CACHE[partition_context.partition_id]["last_flush_datetime"]
-        ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
-            print("!!!!flush to storage account and updateoffset!!!!")
-            data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
-            filename = get_file_name(
-                start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
-                end_date=on_event_batch_date_time,
-                partition_id=partition_context.partition_id,
-                file_extension="json"
+        if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
+            await partition_context.update_checkpoint(
+                CACHE[partition_context.partition_id]["cached_events"][-1]
             )
-            write_json(
-                dir_path=get_dir_path(partition_context.eventhub_name),
-                filename=filename,
-                data_to_write=data_to_write
-            )
-
-            if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
-                await partition_context.update_checkpoint(
-                    CACHE[partition_context.partition_id]["cached_events"][-1]
-                )
-            CACHE[partition_context.partition_id]["cached_events"] = []
-            CACHE[partition_context.partition_id][
-                "last_flush_datetime"
-            ] = on_event_batch_date_time
-        else:
-            print("min wait time not met")
-        raise ValueError('A very specific bad thing happened.')
-    except:
-        print("!!!!123!!!!!!!!!!!!!!!!!!!!Error!!!!")
-        sys.exit(0)
+        CACHE[partition_context.partition_id]["cached_events"] = []
+        CACHE[partition_context.partition_id][
+            "last_flush_datetime"
+        ] = on_event_batch_date_time
+    else:
+        print("min wait time not met")
+    raise ValueError('A very specific bad thing happened.')
+    # except:
+    #     print("!!!!123!!!!!!!!!!!!!!!!!!!!Error!!!!")
+    #     sys.exit(0)
 
 
-async def on_error():
+async def on_error(partition_context: PartitionContext, ex: Exception):
     print("!!!!!!!!!!!!!!!!!!!!!!!!Error!!!!")
     sys.exit(0)
 

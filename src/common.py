@@ -4,6 +4,7 @@ from typing import Literal
 
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
+from src.settings import checkpoint_blob_storage_account_url_prod, checkpoint_blob_storage_account_url_dev
 
 BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "anpr2": "anpr",
@@ -75,3 +76,10 @@ def write_xml(dir_path: str, filename: str, data_to_write: str):
     filepath = f"{dir_path}/{filename}"
     with open(filepath, "w") as f:
         f.write(data_to_write)
+
+
+def get_checkpoint_blob_storage_account_url(environment: str) -> str:
+    if environment == "Ontwikkel":
+        return checkpoint_blob_storage_account_url_dev
+    elif environment == "Productie":
+        return checkpoint_blob_storage_account_url_prod

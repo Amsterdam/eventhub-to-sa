@@ -85,7 +85,6 @@ async def on_event_batch_xml(
 async def on_event_batch_json(
     partition_context: PartitionContext, event_batch: list[EventData]
 ) -> None:
-    # try:
     on_event_batch_date_time = datetime.now()
     print(
         f"Received event from partition: {partition_context.partition_id}. {len(event_batch)}"
@@ -131,9 +130,6 @@ async def on_event_batch_json(
     else:
         print("min wait time not met")
     raise ValueError('A very specific bad thing happened.')
-    # except:
-    #     print("!!!!123!!!!!!!!!!!!!!!!!!!!Error!!!!")
-    #     sys.exit(0)
 
 
 async def on_error(partition_context: PartitionContext, ex: Exception):

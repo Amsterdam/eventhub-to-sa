@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Literal
+import sys
 
 import nest_asyncio
 from azure.eventhub import EventData
@@ -128,6 +129,12 @@ async def on_event_batch_json(
         ] = on_event_batch_date_time
     else:
         print("min wait time not met")
+    raise ValueError('A very specific bad thing happened.')
+
+
+async def on_error():
+    print("Error!!!!")
+    sys.exit(-1)
 
 
 async def main(
@@ -165,6 +172,7 @@ async def main(
     async with client:
         await client.receive_batch(  # Replace with client.receive_batch()
             on_event_batch=on_batch,
+            on_error=on_error,
             max_wait_time=1,
             starting_position="-1",  # "-1" is from the beginning of the partition.
             # prefetch=2,

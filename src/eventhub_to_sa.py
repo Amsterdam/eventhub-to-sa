@@ -134,6 +134,7 @@ async def on_event_batch_json(
 
 async def on_error():
     print("Error!!!!")
+    raise ValueError('A very specific bad thing happened.')
     sys.exit(-1)
 
 

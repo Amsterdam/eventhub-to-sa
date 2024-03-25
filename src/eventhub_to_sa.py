@@ -129,11 +129,10 @@ async def on_event_batch_json(
         ] = on_event_batch_date_time
     else:
         print("min wait time not met")
-    raise ValueError('A very specific bad thing happened.')
 
 
 async def on_error(partition_context: PartitionContext, ex: Exception):
-    print("!!!!!!!!!!!!!!!!!!!!!!!!Error!!!!")
+    print("Exit")
     sys.exit(-1)
 
 

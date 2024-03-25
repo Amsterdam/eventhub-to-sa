@@ -133,7 +133,7 @@ async def on_event_batch_json(
 
 
 async def on_error():
-    print("Error!!!!")
+    print("!!!!!!!!!!!!!!!!!!!!!!!!Error!!!!")
     sys.exit(0)
 
 

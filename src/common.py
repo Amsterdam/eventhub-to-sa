@@ -4,7 +4,8 @@ from typing import Literal
 
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
-from src.settings import checkpoint_blob_storage_account_url_prod, checkpoint_blob_storage_account_url_dev
+
+from src.settings import checkpoint_blob_storage_account_url_dev, checkpoint_blob_storage_account_url_prod
 
 BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "anpr2": "anpr",
@@ -34,9 +35,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
 }
 
 
-def get_environment_name(
-    method: Literal["env_variable", "cluster_tag"] = "env_variable"
-) -> str:
+def get_environment_name(method: Literal["env_variable", "cluster_tag"] = "env_variable") -> str:
     if method == "env_variable":
         return os.environ["DATABRICKS_OTAP_ENVIRONMENT"]
     else:
@@ -49,9 +48,7 @@ def get_key_vault_name(environment: str) -> str:
     elif environment == "Productie":
         return "kv-dpmo-prd-01-Ef1e"
     else:
-        raise ValueError(
-            f"Unknown environment '{environment}, cannot determine key vault name."
-        )
+        raise ValueError(f"Unknown environment '{environment}, cannot determine key vault name.")
 
 
 def retrieve_secret_from_vault(secret_name: str) -> str:

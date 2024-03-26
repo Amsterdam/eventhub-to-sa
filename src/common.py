@@ -5,15 +5,16 @@ from typing import Literal
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
+from src.settings import checkpoint_blob_storage_account_url_dev, checkpoint_blob_storage_account_url_prod
+
 BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "anpr2": "anpr",
     "lvma2": "lvma-telcamera-v2",
-    "lvma3": "vma-telcamera-v3",
+    "lvma3": "lvma-telcamera-v3",
     "lvma_cra": "lvma-peoplemeasurement",
     "reis1": "reistijden",
     "vlog1": "vlog",
 }
-
 
 BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "anpr2": "json",
@@ -24,10 +25,17 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "vlog1": "json",
 }
 
+EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
+    "anpr": "/anpr/v1",
+    "lvma-telcamera-v2": "/lvma-telcamera/v2/",
+    "vma-telcamera-v3": "/lvma-telcamera/v3/",
+    "lvma-peoplemeasurement": "/lvma-peoplemeasurement/v1/",
+    "reistijden": "/reistijden/v1/",
+    "vlog": "/vlog/v1/",
+}
 
-def get_environment_name(
-    method: Literal["env_variable", "cluster_tag"] = "env_variable"
-) -> str:
+
+def get_environment_name(method: Literal["env_variable", "cluster_tag"] = "env_variable") -> str:
     if method == "env_variable":
         return os.environ["DATABRICKS_OTAP_ENVIRONMENT"]
     else:
@@ -40,9 +48,7 @@ def get_key_vault_name(environment: str) -> str:
     elif environment == "Productie":
         return "kv-dpmo-prd-01-Ef1e"
     else:
-        raise ValueError(
-            f"Unknown environment '{environment}, cannot determine key vault name."
-        )
+        raise ValueError(f"Unknown environment '{environment}, cannot determine key vault name.")
 
 
 def retrieve_secret_from_vault(secret_name: str) -> str:
@@ -67,3 +73,10 @@ def write_xml(dir_path: str, filename: str, data_to_write: str):
     filepath = f"{dir_path}/{filename}"
     with open(filepath, "w") as f:
         f.write(data_to_write)
+
+
+def get_checkpoint_blob_storage_account_url(environment: str) -> str:
+    if environment == "Ontwikkel":
+        return checkpoint_blob_storage_account_url_dev
+    elif environment == "Productie":
+        return checkpoint_blob_storage_account_url_prod

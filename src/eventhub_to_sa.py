@@ -13,12 +13,22 @@ from src.common import EVENTHUB_NAME_TO_DIR_PATH_MAPPING, get_environment_name, 
 nest_asyncio.apply()
 
 CACHE = {}
+# MINUTES_BEFORE_FLUSHING_TO_SA_PER_BRONSYSTEEM = {
+#     "anpr2": 1,
+#     "lvma2": 1,
+#     "lvma3": 1,
+#     "lvma_cra": 1,
+#     "reis1": 1,
+#     "vlog1": 1,
+# }  # Adjust to 15 minutes? before running on prod
 MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
 
 
 def get_file_name(start_date: datetime, end_date: datetime, partition_id: str, file_extension: str):
-    return f"{start_date}_{end_date}_{partition_id}.{file_extension}"
+    return (
+        f"{start_date.strftime('%Y%m%d-%H%M%S')}_{end_date.strftime('%Y%m%d-%H%M%S')}_{partition_id}.{file_extension}"
+    )
 
 
 def get_unity_catalog_name() -> str:

@@ -26,12 +26,12 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
 }
 
 EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
-    "anpr": "/anpr/v1",
-    "lvma-telcamera-v2": "/lvma-telcamera/v2/",
-    "vma-telcamera-v3": "/lvma-telcamera/v3/",
-    "lvma-peoplemeasurement": "/lvma-peoplemeasurement/v1/",
-    "reistijden": "/reistijden/v1/",
-    "vlog": "/vlog/v1/",
+    "anpr": "/vorin-staging-anpr/v2/",
+    "lvma-telcamera-v2": "/vorin-staging-lvma/v2/",
+    "lvma-telcamera-v3": "/vorin-staging-lvma/v3/",
+    "lvma-peoplemeasurement": "/vorin-staging-lvma/cra/",
+    "reistijden": "/vorin-staging-reis/v1/",
+    "vlog": "/vorin-staging-vlog/v1/",
 }
 
 

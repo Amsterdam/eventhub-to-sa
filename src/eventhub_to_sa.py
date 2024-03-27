@@ -41,8 +41,8 @@ def get_unity_catalog_name() -> str:
         raise ValueError(f"Unknown environment '{environment}', cannot determine unity catalog name.")
 
 
-def get_dir_path(eventhub_name: str):
-    return f"/Volumes/{get_unity_catalog_name()}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING[eventhub_name]}/"
+def get_dir_path(eventhub_name: str, datetime_for_path: datetime):
+    return f"/Volumes/{get_unity_catalog_name()}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING[eventhub_name]}/{datetime_for_path.strftime('%Y')}/{datetime_for_path.strftime('%m')}/{datetime_for_path.strftime('%d')}/"
 
 
 async def on_event_batch_xml(partition_context: PartitionContext, event_batch: list[EventData]) -> None:
@@ -72,7 +72,12 @@ async def on_event_batch_xml(partition_context: PartitionContext, event_batch: l
             file_extension="xml",
         )
         write_xml(
-            dir_path=get_dir_path(partition_context.eventhub_name), filename=filename, data_to_write=data_to_write
+            dir_path=get_dir_path(
+                eventhub_name=partition_context.eventhub_name,
+                datetime_for_path=CACHE[partition_context.partition_id]["last_flush_datetime"],
+            ),
+            filename=filename,
+            data_to_write=data_to_write,
         )
         if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
             await partition_context.update_checkpoint(CACHE[partition_context.partition_id]["cached_events"][-1])
@@ -107,7 +112,12 @@ async def on_event_batch_json(partition_context: PartitionContext, event_batch: 
             file_extension="json",
         )
         write_json(
-            dir_path=get_dir_path(partition_context.eventhub_name), filename=filename, data_to_write=data_to_write
+            dir_path=get_dir_path(
+                eventhub_name=partition_context.eventhub_name,
+                datetime_for_path=CACHE[partition_context.partition_id]["last_flush_datetime"],
+            ),
+            filename=filename,
+            data_to_write=data_to_write,
         )
 
         if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:

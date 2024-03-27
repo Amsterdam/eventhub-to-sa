@@ -17,6 +17,7 @@ nest_asyncio.apply()
 
 
 if __name__ == "__main__":
+    print("jeujjjjjjj")
     BRONSYSTEEM = "anpr2"
     event_hub_name = BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING[BRONSYSTEEM]
     write_format = BRONSYSTEEM_TO_FILE_FORMAT_MAPPING[BRONSYSTEEM]

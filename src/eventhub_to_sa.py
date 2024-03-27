@@ -64,7 +64,7 @@ async def on_event_batch_xml(partition_context: PartitionContext, event_batch: l
         print("!!!!flush to storage account and updateoffset!!!!")
         data_to_write = "\n".join(
             list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
-        )
+        )  # Note: adding a newline for xml
         filename = get_file_name(
             start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
             end_date=on_event_batch_date_time,

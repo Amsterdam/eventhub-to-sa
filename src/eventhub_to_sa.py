@@ -96,10 +96,11 @@ async def on_event_batch_json(partition_context: PartitionContext, event_batch: 
             partition_id=partition_context.partition_id,
             file_extension="json",
         )
+        print("before write")
         write_json(
             dir_path=get_dir_path(partition_context.eventhub_name), filename=filename, data_to_write=data_to_write
         )
-
+        print("after write")
         if len(CACHE[partition_context.partition_id]["cached_events"]) > 0:
             await partition_context.update_checkpoint(CACHE[partition_context.partition_id]["cached_events"][-1])
         CACHE[partition_context.partition_id]["cached_events"] = []
@@ -109,6 +110,7 @@ async def on_event_batch_json(partition_context: PartitionContext, event_batch: 
 
 
 async def on_error(partition_context: PartitionContext, ex: Exception):
+    print(f"exception: {ex}")
     print("Exit")
     sys.exit(-1)
 

@@ -31,7 +31,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "lvma-telcamera-v3": "/vorin-staging-lvma/v3/",
     "lvma-peoplemeasurement": "/vorin-staging-lvma/cra/",
     "reistijden": "/vorin-staging-reis/v1/",
-    "vlog": "/mvor-staging-vlog/v1/",
+    "vlog": "/vorin-staging-vlog/v1/",
 }
 
 

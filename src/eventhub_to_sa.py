@@ -169,7 +169,8 @@ async def main(
         await client.receive_batch(  # Replace with client.receive_batch()
             on_event_batch=on_batch,
             on_error=on_error,
-            max_wait_time=1,
+            # TODO adjust max wait time
+            max_wait_time=60,
             starting_position="-1",  # "-1" is from the beginning of the partition.
             # prefetch=2,
             max_batch_size=1000,

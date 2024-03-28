@@ -21,7 +21,7 @@ CACHE = {}
 #     "reis1": 1,
 #     "vlog1": 1,
 # }  # Adjust to 15 minutes? before running on prod
-MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
+MINUTES_BEFORE_FLUSHING_TO_SA = 15  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
 
 

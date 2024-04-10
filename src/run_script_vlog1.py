@@ -22,7 +22,7 @@ if __name__ == "__main__":
     event_hub_name = BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING[BRONSYSTEEM]
     write_format = BRONSYSTEEM_TO_FILE_FORMAT_MAPPING[BRONSYSTEEM]
 
-    print(f"STARTING!!! --- eventhub '{event_hub_name}' to landing zone '{BRONSYSTEEM}'-container ---")
+    print(f"STARTING!!!1234 --- eventhub '{event_hub_name}' to landing zone '{BRONSYSTEEM}'-container ---")
     fully_qualified_namespace = retrieve_secret_from_vault(secret_name="eventhub-fully-qualified-namespace")
     credential = DefaultAzureCredential()
 

@@ -21,7 +21,7 @@ CACHE = {}
 #     "reis1": 1,
 #     "vlog1": 1,
 # }  # Adjust to 15 minutes? before running on prod
-MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
+MINUTES_BEFORE_FLUSHING_TO_SA = 15  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
 
 
@@ -176,7 +176,7 @@ async def main(
             on_error=on_error,
             # TODO adjust max wait time
             max_wait_time=60,
-            starting_position="@latest",  # "-1" is from the beginning of the partition.
+            starting_position="-1",  # "-1" is from the beginning of the partition.
             # prefetch=2,
             max_batch_size=1000,
         )

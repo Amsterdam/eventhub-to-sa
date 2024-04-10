@@ -1,4 +1,4 @@
-import sys
+import sys, ast
 from datetime import datetime
 from typing import Literal
 
@@ -21,7 +21,7 @@ CACHE = {}
 #     "reis1": 1,
 #     "vlog1": 1,
 # }  # Adjust to 15 minutes? before running on prod
-MINUTES_BEFORE_FLUSHING_TO_SA = 15  # Adjust to 15 minutes? before running on prod
+MINUTES_BEFORE_FLUSHING_TO_SA = 1  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
 
 
@@ -43,6 +43,10 @@ def get_unity_catalog_name() -> str:
 
 def get_dir_path(eventhub_name: str, datetime_for_path: datetime):
     return f"/Volumes/{get_unity_catalog_name()}/default/landingzone{EVENTHUB_NAME_TO_DIR_PATH_MAPPING[eventhub_name]}/{datetime_for_path.strftime('%Y')}/{datetime_for_path.strftime('%m')}/{datetime_for_path.strftime('%d')}/"
+
+
+def convert_to_list_dict(list_dict: list[str]) -> list[dict]:
+    return list(map(lambda d: ast.literal_eval(d), list_dict))
 
 
 async def on_event_batch_xml(partition_context: PartitionContext, event_batch: list[EventData]) -> None:
@@ -104,7 +108,8 @@ async def on_event_batch_json(partition_context: PartitionContext, event_batch: 
         on_event_batch_date_time - CACHE[partition_context.partition_id]["last_flush_datetime"]
     ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
         print("!!!!flush to storage account and updateoffset!!!!")
-        data_to_write = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
+        events: list[str] = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
+        data_to_write: list[dict] = convert_to_list_dict(events)
         filename = get_file_name(
             start_date=CACHE[partition_context.partition_id]["last_flush_datetime"],
             end_date=on_event_batch_date_time,

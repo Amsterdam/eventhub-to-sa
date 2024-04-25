@@ -23,7 +23,7 @@ CACHE = {}
 # }  # Adjust to 15 minutes? before running on prod
 MINUTES_BEFORE_FLUSHING_TO_SA = 15  # Adjust to 15 minutes? before running on prod
 START_SCRIPT_DATE_TIME = datetime.now()
-
+MAX_FILE_ROW_SIZE = 15000
 
 def get_file_name(start_date: datetime, end_date: datetime, partition_id: str, file_extension: str):
     return (
@@ -64,7 +64,9 @@ async def on_event_batch_xml(partition_context: PartitionContext, event_batch: l
 
     if (
         on_event_batch_date_time - CACHE[partition_context.partition_id]["last_flush_datetime"]
-    ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
+    ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60 or len(
+        CACHE[partition_context.partition_id]["cached_events"]
+    ) > MAX_FILE_ROW_SIZE:
         print("!!!!flush to storage account and updateoffset!!!!")
         data_to_write = "\n".join(
             list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
@@ -106,7 +108,9 @@ async def on_event_batch_json(partition_context: PartitionContext, event_batch: 
 
     if (
         on_event_batch_date_time - CACHE[partition_context.partition_id]["last_flush_datetime"]
-    ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60:
+    ).seconds > MINUTES_BEFORE_FLUSHING_TO_SA * 60 or len(
+        CACHE[partition_context.partition_id]["cached_events"]
+    ) > MAX_FILE_ROW_SIZE:
         print("!!!!flush to storage account and updateoffset!!!!")
         events: list[str] = list(map(lambda e: e.body_as_str(), CACHE[partition_context.partition_id]["cached_events"]))
         data_to_write: list[dict] = convert_to_list_dict(events)

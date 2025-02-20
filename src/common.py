@@ -14,6 +14,7 @@ BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "lvma_cra": "lvma-peoplemeasurement",
     "reis1": "reistijden",
     "vlog1": "vlog",
+    "vijzelgracht": "garageparkeren-vijzelgracht",
 }
 
 BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
@@ -23,6 +24,7 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "lvma_cra": "json",
     "reis1": "xml",
     "vlog1": "json",
+    "vijzelgracht": "json",
 }
 
 EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
@@ -32,6 +34,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "lvma-peoplemeasurement": "/vorin-staging-lvma/cra/",
     "reistijden": "/vorin-staging-reis/v1/",
     "vlog": "/vorin-staging-vlog/v1/",
+    "garageparkeren-vijzelgracht": "/garageparkeren-vijzelgracht/v1/",
 }
 
 

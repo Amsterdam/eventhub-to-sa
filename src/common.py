@@ -34,7 +34,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "lvma-peoplemeasurement": "/vorin-staging-lvma/cra/",
     "reistijden": "/vorin-staging-reis/v1/",
     "vlog": "/vorin-staging-vlog/v1/",
-    "garageparkeren-vijzelgracht": "/garageparkeren-vijzelgracht/v1/",
+    "garageparkeren-vijzelgracht": "/garageparkeren-staging-ldg/v1/",
 }
 
 

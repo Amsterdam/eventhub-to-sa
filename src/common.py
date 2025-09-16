@@ -28,13 +28,13 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
 }
 
 EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
-    "anpr": "/vorin-staging-anpr/v2/",
-    "lvma-telcamera-v2": "/vorin-staging-lvma/v2/",
-    "lvma-telcamera-v3": "/vorin-staging-lvma/v3/",
-    "lvma-peoplemeasurement": "/vorin-staging-lvma/cra/",
-    "reistijden": "/vorin-staging-reis/v1/",
-    "vlog": "/vorin-staging-vlog/v1/",
-    "garageparkeren-vijzelgracht": "/garageparkeren-staging-ldg/v1/",
+    "anpr": "/vorin-anpr/v2/",
+    "lvma-telcamera-v2": "/vorin-lvma/v2/",
+    "lvma-telcamera-v3": "/vorin-lvma/v3/",
+    "lvma-peoplemeasurement": "/vorin-lvma/cra/",
+    "reistijden": "/vorin-reis/v1/",
+    "vlog": "/vorin-vlog/v1/",
+    "garageparkeren-vijzelgracht": "/garageparkeren-ldg/v1/",
 }
 
 

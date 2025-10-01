@@ -37,7 +37,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "reistijden": "/vorin-reis/v1/",
     "vlog": "/vorin-vlog/v1/",
     "garageparkeren-vijzelgracht": "/garageparkeren-ldg/v1/",
-    "ais": "/varen-ggs/v1/"
+    "ais": "/varen-ais/v1"
 }
 
 

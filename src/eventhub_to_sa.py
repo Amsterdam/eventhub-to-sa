@@ -14,7 +14,7 @@ nest_asyncio.apply()
 
 CACHE = {}
 # MINUTES_BEFORE_FLUSHING_TO_SA_PER_BRONSYSTEEM = {
-#     "anpr2": 1,
+#     "anpr2": 1,,
 #     "lvma2": 1,
 #     "lvma3": 1,
 #     "lvma_cra": 1,

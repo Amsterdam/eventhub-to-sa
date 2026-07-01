@@ -15,7 +15,8 @@ BRONSYSTEEM_TO_EVENTHUB_NAME_MAPPING = {
     "reis1": "reistijden",
     "vlog1": "vlog",
     "vijzelgracht": "garageparkeren-vijzelgracht",
-    "ggs1": "ais"
+    "ggs1": "ais",
+    "stalling_bezetting": "stalling-bezetting"
 }
 
 BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
@@ -26,7 +27,8 @@ BRONSYSTEEM_TO_FILE_FORMAT_MAPPING = {
     "reis1": "xml",
     "vlog1": "json",
     "vijzelgracht": "json",
-    "ggs1": "json"
+    "ggs1": "json",
+    "stalling_bezetting": "json"
 }
 
 EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
@@ -37,7 +39,8 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "reistijden": "/vorin-reis/v1/",
     "vlog": "/vorin-vlog/v1/",
     "garageparkeren-vijzelgracht": "/garageparkeren-ldg/v1/",
-    "ais": "/varen-ais/v1"
+    "ais": "/varen-ais/v1",
+    "stalling-bezetting": "parkeren-idma/rest_api_v1/"
 }
 
 

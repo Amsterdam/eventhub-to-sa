@@ -40,7 +40,7 @@ EVENTHUB_NAME_TO_DIR_PATH_MAPPING = {
     "vlog": "/vorin-vlog/v1/",
     "garageparkeren-vijzelgracht": "/garageparkeren-ldg/v1/",
     "ais": "/varen-ais/v1",
-    "stalling-bezetting": "parkeren-idma/rest_api_v1/"
+    "stalling-bezetting": "/parkeren-idma/rest_api_v1/"
 }
 
 
